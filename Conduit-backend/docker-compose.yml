@@ -1,0 +1,33 @@
+version: '1.0'
+services:
+  postgresserver:
+    image: postgres
+    ports:
+      - 35000:5432
+    volumes: 
+      - realworld-data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: conduit
+      # PGDATA: /var/lib/postgresql/data/pgdata
+
+  api:
+    build: 
+      dockerfile: Dockerfile
+      context: ./
+    ports:
+      - 8080:8080
+    working_dir: /realworld
+    volumes:
+      - ./:/realworld
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresserver:5432/conduit
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - postgresserver
+
+volumes:
+  realworld-data:
