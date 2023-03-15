@@ -1,0 +1,11 @@
+version: '1.0'
+services:
+  conduit-react-app:
+    build: 
+      dockerfile: Dockerfile
+      context: ./
+    ports:
+      - 3000:3000
+    working_dir: /conduit-app
+    volumes:
+      - ./:/conduit-app
